@@ -1,0 +1,141 @@
+---
+project: CaaS GitOps
+kind: PIPELINE
+name: TAP-S2N
+icon: organization,left, is-pink
+enabled: true
+global: false
+description: Create a Kubernetes cluster on your choice of IaaS and then deploy TAP
+concurrency: 10
+input:
+  clusterName: ''
+  k8s: '1'
+_inputMeta:
+  clusterName:
+    description: ''
+    mandatory: true
+  k8s:
+    description: Infrastructure platform
+    mandatory: true
+output:
+  cluster-aks: ${cluster-tap.create-AKS-k8s-cluster.status}
+  cluster-eks: ${cluster-tap.create-EKS-k8s-cluster.status}
+  cluster-gke: ${cluster-tap.create-GKE-k8s-cluster.status}
+  cluster-tkgm: ${cluster-tap.create-TKGM-k8s-cluster.status}
+  cluster-tkgs: ${cluster-tap.create-TKGS-k8s-cluster.status}
+workspace:
+  type: DOCKER
+  endpoint: ''
+  image: ''
+  registry: ''
+  path: ''
+  autoCloneForTrigger: false
+  limits:
+    cpu: 1.0
+    memory: 512
+stageOrder:
+- cluster-tap
+stages:
+  cluster-tap:
+    taskOrder:
+    - create-EKS-k8s-cluster,create-AKS-k8s-cluster,create-TKGM-k8s-cluster,create-TKGS-k8s-cluster,create-GKE-k8s-cluster
+    - checkClusterCreate
+    - get-kubeconfig
+    tasks:
+      create-TKGM-k8s-cluster:
+        type: Pipeline
+        preCondition: ${input.k8s}==3
+        input:
+          pipeline: CaaS - Cluster - Private Advanced
+          project: CaaS GitOps
+          inputProperties:
+            apiServerEndpoint: ''
+            clusterDescription: 'ariaAutomation_tkgmCluster '
+            clusterGroup: apa-test
+            clusterName: ${input.clusterName}
+            controllerReplicas: '1'
+            dataStore: vsanDatastore
+            managementClusterName: apa-lab-manager-1
+            provisionerName: charlie
+            worker_diskGiB: '120'
+            worker_memoryMiB: '12288'
+            worker_numCPUs: '8'
+            workerNodes: '3'
+      create-GKE-k8s-cluster:
+        type: Blueprint
+        preCondition: ${input.k8s}==5
+        input:
+          action: CreateDeployment
+          project: CaaS GitOps
+          deploymentName: create-GKE-k8s-cluster
+          blueprint: CaaS - Cluster - Public AWS
+          version: '5'
+          parameters:
+            cluster_name: ${input.clusterName}
+            cluster_description: 'ariaAutomation_gkeCluster '
+            platform_options: '""'
+            cluster_options: '""'
+      create-AKS-k8s-cluster:
+        type: Blueprint
+        preCondition: ${input.k8s}==2
+        input:
+          action: CreateDeployment
+          project: CaaS GitOps
+          deploymentName: create-AKS-k8s-cluster
+          blueprint: CaaS - Cluster - Public Azure
+          version: '8'
+          parameters:
+            cluster_name: ${input.clusterName}
+            endpoint: mapbuapj.tmc.cloud.vmware.com
+            tmc_values: '""'
+            cluster_descripiton: 'ariaAutomation_aksCluster '
+            cluster_options: '""'
+      get-kubeconfig:
+        type: Pipeline
+        preCondition: ${cluster-tap.checkClusterCreate.output.outputProperties.agentHealth}=="TRUE"
+        input:
+          pipeline: CaaS - Action - Cluster Kubeconfig
+          project: CaaS GitOps
+          inputProperties:
+            clusterName: ${input.clusterName}
+            managementClusterName: ''
+            provisionerName: ''
+      create-EKS-k8s-cluster:
+        type: Blueprint
+        preCondition: ${input.k8s}==1
+        input:
+          action: CreateDeployment
+          project: CaaS GitOps
+          deploymentName: create-EKS-k8s-cluster
+          blueprint: CaaS - Cluster - Public AWS
+          version: '5'
+          parameters:
+            cluster_name: ${input.clusterName}
+            cluster_description: 'ariaAutomation_eksCluster '
+            platform_options: '""'
+            cluster_options: '""'
+      create-TKGS-k8s-cluster:
+        type: Blueprint
+        preCondition: ${input.k8s}==4
+        input:
+          action: CreateDeployment
+          project: CaaS GitOps
+          deploymentName: create-TKGS-k8s-cluster
+          blueprint: CaaS - Cluster - Private
+          version: '8'
+          parameters:
+            resource: small
+            name: ${input.clusterName}
+            workers: 3
+            class: dev-small
+            cluster_name: ${input.clusterName}
+            cluster_description: 'ariaAutomation_tkgsCluster '
+            platform_options: '""'
+            cluster_options: '""'
+      checkClusterCreate:
+        type: Pipeline
+        input:
+          pipeline: CaaS - Action - Cluster Status
+          project: CaaS GitOps
+          inputProperties:
+            clusterName: ${input.clusterName}

@@ -1,0 +1,56 @@
+formatVersion: 1
+inputs:
+  name:
+    type: string
+    title: Cluster Name
+    description: DNS-compliant cluster name
+    default: mycluster1
+    minLength: 4
+    maxLength: 32
+  workers:
+    type: integer
+    title: Worker Node Count
+    default: 1
+    minimum: 1
+    maximum: 4
+    enum:
+      - 1
+      - 2
+      - 3
+      - 4
+  resource:
+    type: string
+    title: Resource
+    description: Resource Allocation
+    default: small
+    format: ''
+    oneOf:
+      - title: Small
+        const: small
+      - title: Medium
+        const: medium
+      - title: Large
+        const: large
+  class:
+    type: string
+    title: Class
+    description: Class of service
+    default: dev-small
+    format: ''
+    oneOf:
+      - title: Development
+        const: dev-small
+      - title: Production
+        const: prod-small
+resources:
+  Cloud_Tanzu_Cluster_1:
+    type: Cloud.Tanzu.Cluster
+    metadata:
+      layoutPosition:
+        - 1
+        - 1
+    properties:
+      name: ${input.name}
+      plan: ${input.class}
+      workers: ${input.workers}
+      tmcClusterGroupName: apa-test

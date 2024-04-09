@@ -1,0 +1,40 @@
+inputs:
+  cluster_name:
+    type: string
+    default: myekscluster1
+    description: The Name of the cluster
+  cluster_description:
+    type: string
+    default: Aria managed cluster
+    description: Description of the cluster to be created
+  cluster_options:
+    type: object
+    title: Cluster Options
+    description: Configuration options for the Kubernetes cluster
+    $ref: /ref/property-groups/eks_values
+  platform_options:
+    type: object
+    title: Platform Options
+    $ref: /ref/property-groups/tmc_values
+resources:
+  terraform:
+    type: Cloud.Terraform.Configuration
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      variables:
+        vmw_cloud_api_token: ${secret.vmcloud_api_key}
+        cluster_name: ${input.cluster_name}
+        cluster_description: ${input.cluster_description}
+        cluster_group: ${input.platform_options.cluster_group}
+        region: ${input.cluster_options.region}
+        kubernetes_version: ${input.cluster_options.k8s_version}
+        node_instance_type: ${input.cluster_options.node_instance_type}
+        node_count: ${input.cluster_options.node_count}
+      terraformVersion: 1.0.5
+      configurationSource:
+        repositoryId: 2fdca6f3-568f-4d4d-81e6-48404f999a27
+        commitId: 17d3f90c4876425559ef2a52b6ae4e61d1046581
+        sourceDirectory: create_cluster_eks

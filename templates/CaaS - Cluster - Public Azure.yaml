@@ -1,0 +1,48 @@
+inputs:
+  endpoint:
+    type: string
+    default: mapbuapj.tmc.cloud.vmware.com
+    description: The Tanzu Mission Control service endpoint hostname
+    readOnly: true
+  cluster_name:
+    type: string
+    default: mycluster1
+    description: The Name of the cluster
+  cluster_descripiton:
+    type: string
+    title: Description
+    description: General description of the cluster
+    default: TMC AKS Cluster
+    format: ''
+  cluster_options:
+    type: object
+    title: Cluster Options
+    $ref: /ref/property-groups/aks_values
+  platform_options:
+    type: object
+    title: Platform Options
+    $ref: /ref/property-groups/tmc_values
+resources:
+  terraform:
+    type: Cloud.Terraform.Configuration
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      variables:
+        endpoint: ${input.endpoint}
+        vmw_cloud_api_token: ${secret.vmcloud_api_key}
+        cluster_name: ${input.cluster_name}
+        cluster_description: ${input.cluster_descripiton}
+        cluster_group: ${input.platform_options.cluster_group}
+        kubernetes_version: ${input.cluster_options.aks_k8s_version}
+        region: ${input.cluster_options.aks_region}
+        node_size: ${input.cluster_options.aks_node_size}
+        node_count: ${input.cluster_options.node_count}
+      providers: []
+      terraformVersion: 1.0.5
+      configurationSource:
+        repositoryId: 2fdca6f3-568f-4d4d-81e6-48404f999a27
+        commitId: e181882500246d7c8cbef5008457073a408a277e
+        sourceDirectory: create_cluster_aks
