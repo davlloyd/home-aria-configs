@@ -28,12 +28,6 @@ variable "password" {
   default = "B3ach8um"
 }
 
-variable "management_cluster_name" {
-  description = "The Tanzu Mission Control entry for the TKG Supervisor cluster"
-  type = string
-  default = "supervisor1"
-}
-
 variable "workspace_name" {
   description = "name to assign to the workspace"
   type = string
