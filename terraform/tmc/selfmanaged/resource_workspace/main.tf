@@ -15,9 +15,9 @@ resource "tanzu-mission-control_workspace" "create_workspace" {
   name = var.workspace_name
 
   meta {
-    description = var.workspace_description"
+    description = var.workspace_description
     labels = {
-      "key1" : "value1",
+      "key1" : "value1"
       "key2" : "value2"
     }
   }
