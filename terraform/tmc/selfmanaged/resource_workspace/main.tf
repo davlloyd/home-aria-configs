@@ -12,10 +12,10 @@ provider "tanzu-mission-control" {
 
 
 resource "tanzu-mission-control_workspace" "create_workspace" {
-  name = "var.workspace_name"
+  name = var.workspace_name
 
   meta {
-    description = "var.workspace_description"
+    description = var.workspace_description
     labels = {
       "author" : "terraform",
       "managedby" : "Aria Automation"
