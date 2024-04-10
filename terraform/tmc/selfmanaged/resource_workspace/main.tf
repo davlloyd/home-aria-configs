@@ -12,13 +12,13 @@ provider "tanzu-mission-control" {
 
 
 resource "tanzu-mission-control_workspace" "create_workspace" {
-  name = "tf-workspace-test"
+  name = "var.workspace_name"
 
   meta {
-    description = "Create workspace through terraform"
+    description = "var.workspace_description"
     labels = {
-      "key1" : "value1",
-      "key2" : "value2"
+      "author" : "terraform",
+      "managedby" : "Aria Automation"
     }
   }
 }
