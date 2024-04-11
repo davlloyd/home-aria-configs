@@ -119,3 +119,14 @@ variable "ntp_server" {
     default = "pool.ntp.org"
 }
 
+variable "kubelet_disk" {
+    description = "Disk capacity to asign to the kubelet directory"
+    type = string
+    default = "20G"
+}
+
+variable "containerd_disk" {
+    description = "Disk capacity to asign to the containerd directory for ephemeral storage"
+    type = string
+    default = "20G"
+}

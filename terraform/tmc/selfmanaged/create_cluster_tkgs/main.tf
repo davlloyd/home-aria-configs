@@ -25,12 +25,21 @@ locals {
     "nodePoolVolumes" : [
       {
         "capacity" : {
-          "storage" : "20G"
+          "storage" : var.containerd_disk
         },
         "mountPath" : "/var/lib/containerd",
         "name" : "containerd",
         "storageClass" : var.storage_class
+      },
+      {
+        "capacity" : {
+          "storage" : var.kubelet_disk
+        },
+        "mountPath" : "/var/lib/kubelet",
+        "name" : "kubelet",
+        "storageClass" : var.storage_class
       }
+
     ],
     "ntp" : var.ntp_server,
     "storageClass" : var.storage_class,
