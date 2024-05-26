@@ -33,3 +33,4 @@ override.tf.json
 .terraformrc
 terraform.rc
 terraform/tmc/selfmanaged/resource_workspace/.terraform.lock.hcl
+.DS_Store
