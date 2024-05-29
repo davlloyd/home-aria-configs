@@ -1,0 +1,142 @@
+layout:
+  pages:
+    - id: page_general
+      sections:
+        - id: section_project
+          fields:
+            - id: project
+              display: dropDown
+              signpostPosition: right-middle
+        - id: section_deploymentName
+          fields:
+            - id: deploymentName
+              display: textField
+              state:
+                visible: true
+                read-only: false
+              signpostPosition: right-middle
+        - id: section_cluster_name
+          fields:
+            - id: cluster_name
+              display: textField
+              state:
+                visible: true
+                read-only: false
+              signpostPosition: right-middle
+        - id: section_cluster_description
+          fields:
+            - id: cluster_description
+              display: textField
+              state:
+                visible: true
+                read-only: false
+              signpostPosition: right-middle
+        - id: section_control_plane_replicas
+          fields:
+            - id: control_plane_replicas
+              display: dropDown
+              state:
+                visible: true
+                read-only: false
+              signpostPosition: right-middle
+        - id: section_bf05afda
+          fields:
+            - id: radio_6f03c9ad
+              display: dropDown
+              state:
+                visible: true
+                read-only: false
+              signpostPosition: right-middle
+        - id: section_worker_node_replicas
+          fields:
+            - id: worker_node_replicas
+              display: decimalField
+              state:
+                visible: false
+                read-only: false
+              signpostPosition: right-middle
+      title: General
+schema:
+  project:
+    label: Project
+    type:
+      dataType: string
+      isMultiple: false
+    valueList:
+      id: projects
+      type: scriptAction
+    constraints:
+      required: true
+  deploymentName:
+    label: Deployment Name
+    type:
+      dataType: string
+      isMultiple: false
+    default: deploy-nnn
+    constraints:
+      required: true
+      max-value: 900
+  cluster_name:
+    label: Cluster _name
+    description: The Name of the cluster
+    signpost: The Name of the cluster
+    type:
+      dataType: string
+      isMultiple: false
+    default: home-tap-nnn
+    constraints: {}
+  cluster_description:
+    label: Cluster _description
+    description: Description of the cluster to be created
+    signpost: Description of the cluster to be created
+    type:
+      dataType: string
+      isMultiple: false
+    default: Aria managed cluster
+  control_plane_replicas:
+    label: Highly Available
+    description: Controller Plane node count
+    signpost: Controller Plane node count
+    type:
+      dataType: decimal
+      isMultiple: false
+    default: 1
+    valueList:
+      - label: 'No'
+        value: 1
+        description: Reduced scale service
+      - label: 'Yes'
+        value: 3
+        description: Configured for high availability
+    constraints:
+      required: true
+  radio_6f03c9ad:
+    label: Service Size
+    type:
+      dataType: decimal
+    default: 3
+    valueList:
+      - label: Small
+        value: 3
+      - label: Medium
+        value: 4
+      - label: Large
+        value: 5
+      - label: Extra Large
+        value: 6
+    constraints:
+      required: true
+  worker_node_replicas:
+    label: Worker Nodes
+    description: Worker node count
+    signpost: Worker node count
+    type:
+      dataType: decimal
+      isMultiple: false
+    default:
+      bind: radio_6f03c9ad
+    constraints:
+      max-value: 8
+      min-value: 3
+options:
+  externalValidations: []
