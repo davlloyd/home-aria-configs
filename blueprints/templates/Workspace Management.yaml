@@ -1,0 +1,32 @@
+inputs:
+  workspace_name:
+    type: string
+    default: workspace-test
+    description: name to assign to the workspace
+    title: Name
+    format: ""
+  workspace_description:
+    type: string
+    default: Aria managed workspace
+    description: Description of the workspace
+    title: Description
+    format: ""
+resources:
+  terraform:
+    type: Cloud.Terraform.Configuration
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      variables:
+        username: ${secret.tmc_username}
+        password: ${secret.tmc_password}
+        workspace_name: ${input.workspace_name}
+        workspace_description: ${input.workspace_description}
+      providers: []
+      terraformVersion: 1.0.5
+      configurationSource:
+        repositoryId: 487ecab4-1138-4210-b821-594a4b2f0e26
+        commitId: b14e6d28138ca27b5d4ddcdd6fe6f0fa4c0cf094
+        sourceDirectory: resource_workspace
