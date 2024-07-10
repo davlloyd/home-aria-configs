@@ -1,7 +1,7 @@
 variable "endpoint" {
   description = "The Tanzu Mission Control service endpoint hostname"
   type = string
-  default = "tmc.home.tanzu.rocks"
+  default = "tmc.tanzu.rocks"
 }
 
 variable "insecure_allow_unverified_ssl" {
