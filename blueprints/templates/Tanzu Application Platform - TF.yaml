@@ -1,0 +1,48 @@
+inputs:
+  cluster_name:
+    type: string
+    default: home-tap-nnn
+    description: The Name of the cluster
+    format: ""
+  cluster_description:
+    type: string
+    default: Aria managed cluster
+    description: Description of the cluster to be created
+  control_plane_replicas:
+    type: number
+    default: "1"
+    description: Controller Plane node count
+  worker_node_replicas:
+    type: number
+    default: "3"
+    description: Worker node count
+resources:
+  TAP_Platform:
+    type: Cloud.Terraform.Configuration
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      variables:
+        endpoint: tmc.tanzu.rocks
+        username: ${secret.tmc_username}
+        password: ${secret.tmc_password}
+        provisioner_name: tap
+        cluster_name: ${input.cluster_name}
+        cluster_description: ${input.cluster_description}
+        cluster_group_name: tap
+        cluster_class: tanzukubernetescluster
+        vm_class: tap-node-small
+        storage_class: general-usage
+        kubernetes_version: v1.28.8+vmware.1-fips.1-tkg.2
+        control_plane_replicas: ${input.control_plane_replicas}
+        worker_node_replicas: ${input.worker_node_replicas}
+        kubelet_disk: 30G
+        containerd_disk: 80G
+      providers: []
+      terraformVersion: 1.0.5
+      configurationSource:
+        repositoryId: 487ecab4-1138-4210-b821-594a4b2f0e26
+        commitId: 761a53f2ea38826ef459fd535f170ad58536fc30
+        sourceDirectory: create_cluster_tkgs

@@ -1,0 +1,38 @@
+formatVersion: 1
+inputs:
+  name:
+    type: string
+    title: Name
+    description: Name of Project
+    format: ""
+  description:
+    type: string
+    title: Description
+    description: Description of Project
+    format: ""
+  ado_project_capabilities:
+    type: object
+    title: Project Capabilties
+    description: Capabilities applied to Project
+    $ref: /ref/property-groups/ado_project_values
+  visibility:
+    type: string
+    title: Visibility
+    description: Project visibility private/public
+    default: private
+    format: ""
+    enum:
+      - private
+resources:
+  project:
+    type: Custom.ADO.Project
+    metadata:
+      layoutPosition:
+        - 1
+        - 1
+    properties:
+      name: ${input.name}
+      description: ${input.description}
+      processtemplate: ${input.ado_project_capabilities.processtemplate}
+      sourcecontroltype: ${input.ado_project_capabilities.sourcecontroltype}
+      visibility: ${input.visibility}
